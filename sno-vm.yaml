@@ -1,0 +1,39 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: kincl-sno
+  labels:
+    app: kincl-sno
+  namespace: jkincl
+spec:
+  running: false
+  template:
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 8
+          threads: 1
+        devices:
+          interfaces:
+            - bridge: {}
+              macAddress: '02:de:ad:be:ef:00'
+              model: virtio
+              name: default
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: pc-q35-rhel9.4.0
+        memory:
+          guest: 28Gi
+      networks:
+        - multus:
+            networkName: airgap
+          name: default
+      terminationGracePeriodSeconds: 180
